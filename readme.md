@@ -1,5 +1,7 @@
 # tokenize-db-station-name
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/derhuerst/tokenize-db-station-name.svg)](https://greenkeeper.io/)
+
 **Make [Deutsche Bahn](https://en.wikipedia.org/wiki/Deutsche_Bahn) station names search-safe.**
 
 The station names from DB are inconsistent and user's search queries are not perfect either. This module tries to compensate edge cases:
