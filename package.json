@@ -22,6 +22,7 @@
 		"node": ">=6"
 	},
 	"dependencies": {
+		"normalize-for-search": "^2.0.1"
 	},
 	"devDependencies": {
 		"tap-min": "^1.2.2",
