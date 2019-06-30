@@ -2,96 +2,70 @@
 
 const normalize = require('normalize-for-search')
 
-const replace = Object.assign(Object.create(null), {
-	'bay': ['bayern'],
-	'thuer': ['thueringen'],
-	'sachs': ['sachsen'],
-	'anh': ['anhalt'],
-	'westf': ['westfalen'],
-	'wuertt': ['wuerttemberg'],
-	'oberpf': ['oberpfalz'],
-	'schwab': ['schwaben'],
-	'oberbay': ['oberbayern'],
-	'holst': ['holstein'],
-	'braunschw': ['braunschweig'],
-	'saalkr': ['saalekreis'],
-	'saalkr': ['saalekreis'],
-	'niederbay': ['niederbayern'],
-	'schwarzw': ['schwarzwald'],
-	'oldb': ['oldenburg'],
-	'uckerm': ['uckermark'],
-	'rheinl': ['rheinland'],
-	'oberfr': ['oberfranken'],
-	'rheinhess': ['rheinhessen'],
-	'hess': ['hessen'],
-	'altm': ['altmark'],
-	'limes': ['limesstadt'],
-	'vogtl': ['vogtland'],
-	'meckl': ['mecklenburg'],
-	'mittelfr': ['mittelfranken'],
-	'dillkr': ['dillkreis'],
-	'odenw': ['odenwald'],
-	'erzgeb': ['erzgebirge'],
-	'weinstr': ['weinstrasse'],
-	'prign': ['prignitz'],
-	'oberhess': ['oberhessen'],
-	'ostfriesl': ['ostfriesland'],
-	'schlesw': ['schleswig'],
-	'saechs schweiz': ['saechsische', 'schweiz'], // todo
-	'unterfr': ['unterfranken'],
-	'westerw': ['westerwald'],
-	'dithm': ['dithmarschen'],
-	'thueringerw': ['thueringer', 'wald'],
+const transformations = [
+	[/(?<!\w)bay(?=$|\s)/g, 'bayern'],
+	[/(?<!\w)thuer(?=$|\s)/g, 'thueringen'],
+	[/(?<!\w)sachs(?=$|\s)/g, 'sachsen'],
+	[/(?<!\w)anh(?=$|\s)/g, 'anhalt'],
+	[/(?<!\w)westf(?=$|\s)/g, 'westfalen'],
+	[/(?<!\w)wuertt(?=$|\s)/g, 'wuerttemberg'],
+	[/(?<!\w)oberpf(?=$|\s)/g, 'oberpfalz'],
+	[/(?<!\w)schwab(?=$|\s)/g, 'schwaben'],
+	[/(?<!\w)oberbay(?=$|\s)/g, 'oberbayern'],
+	[/(?<!\w)holst(?=$|\s)/g, 'holstein'],
+	[/(?<!\w)braunschw(?=$|\s)/g, 'braunschweig'],
+	[/(?<!\w)saalkr(?=$|\s)/g, 'saalekreis'],
+	[/(?<!\w)saalkr(?=$|\s)/g, 'saalekreis'],
+	[/(?<!\w)niederbay(?=$|\s)/g, 'niederbayern'],
+	[/(?<!\w)schwarzw(?=$|\s)/g, 'schwarzwald'],
+	[/(?<!\w)oldb(?=$|\s)/g, 'oldenburg'],
+	[/(?<!\w)uckerm(?=$|\s)/g, 'uckermark'],
+	[/(?<!\w)rheinl(?=$|\s)/g, 'rheinland'],
+	[/(?<!\w)oberfr(?=$|\s)/g, 'oberfranken'],
+	[/(?<!\w)rheinhess(?=$|\s)/g, 'rheinhessen'],
+	[/(?<!\w)hess(?=$|\s)/g, 'hessen'],
+	[/(?<!\w)altm(?=$|\s)/g, 'altmark'],
+	[/(?<!\w)limes(?=$|\s)/g, 'limesstadt'],
+	[/(?<!\w)vogtl(?=$|\s)/g, 'vogtland'],
+	[/(?<!\w)meckl(?=$|\s)/g, 'mecklenburg'],
+	[/(?<!\w)mittelfr(?=$|\s)/g, 'mittelfranken'],
+	[/(?<!\w)dillkr(?=$|\s)/g, 'dillkreis'],
+	[/(?<!\w)odenw(?=$|\s)/g, 'odenwald'],
+	[/(?<!\w)erzgeb(?=$|\s)/g, 'erzgebirge'],
+	[/(?<!\w)prign(?=$|\s)/g, 'prignitz'],
+	[/(?<!\w)oberhess(?=$|\s)/g, 'oberhessen'],
+	[/(?<!\w)ostfriesl(?=$|\s)/g, 'ostfriesland'],
+	[/(?<!\w)schlesw(?=$|\s)/g, 'schleswig'],
+	[/(?<!\w)saechs\sschweiz(?=$|\s)/g, 'saechsische schweiz'],
+	[/(?<!\w)unterfr(?=$|\s)/g, 'unterfranken'],
+	[/(?<!\w)westerw(?=$|\s)/g, 'westerwald'],
+	[/(?<!\w)dithm(?=$|\s)/g, 'dithmarschen'],
+	[/(?<!\w)thueringerw(?=$|\s)/g, 'thueringer wald'],
+	[/(?<!\w)schaumb\slippe(?=$|\s)/g, 'schaumburg lippe'],
 
-	'ob': ['oben'],
-	'unt': ['unten'],
-	'bf': ['bahnhof'],
-	'hbf': ['hauptbahnhof']
-})
-
-const replaceWithLookahead = (token, next, replacement) => (ts) => {
-	const i = ts.indexOf(token)
-	if (i >= 0 && ts[i + 1] === next) ts[i] = replacement
-	return ts
-}
-
-const str = /(?!^)str$/g
-const strasse = /(?!^)stra(ss|ß)e$/
-const expandStr = (ts) => {
-	return ts.reduce((ts, t) => {
-		if (t.match(str)) return [...ts, t.replace(str, ''), 'strasse']
-		if (t.match(strasse)) return [...ts, t.replace(strasse, ''), 'strasse']
-		return [...ts, t]
-	}, [])
-}
-
-const transforms = [
-	(ts) => {
-		return ts.reduce((ts, t) => {
-			return replace[t] ? [...ts, ...replace[t]] : [...ts, t]
-		}, [])
-	},
-	replaceWithLookahead('saechs', 'schweiz', 'saechsische'),
-	replaceWithLookahead('schaumb', 'lippe', 'schaumburg'),
-	(ts) => {
-		const i = ts.indexOf('b')
-		if (i >= 0 && ts[i + 1]) ts[i] = 'bei'
-		return ts
-	},
-	expandStr
+	[/(?<!\w)ob(?=$|\s)/g, 'oben'],
+	[/(?<!\w)unt(?=$|\s)/g, 'unten'],
+	[/(?<!\w)bf(?=$|\s)/g, 'bahnhof'],
+	[/(?<!\w)hbf(?=$|\s)/g, 'hauptbahnhof'],
+	[/(?<!\w)b(?=\s\w)/g, 'bei'], // "foo b berlin" -> "foo bei berlin"
+	[/str(?=$|\s)/g, ' strasse'], // "weinstr foo" -> "wein strasse foo"
+	[/(?<=\w)strasse(?=$|\s)/g, ' strasse'] // "seestrasse" -> "see strasse"
 ]
 
 const tokenize = (name) => {
 	if ('string' !== typeof name) throw new Error('name must be a string')
 	if (name.length === 0) return []
 
-	let ts = normalize(name)
-	.split(/[\s\/\(\)\-,\.\+]+/)
-	.map(t => t.trim())
-	.filter(t => !!t)
+	name = normalize(name)
+	.replace(/[\/\(\)\-,\.\+]+/g, ' ') // remove special chars
+	.replace(/\s+/g, ' ') // remove unnecessary whitespace
+	.trim()
 
-	for (let t of transforms) ts = t(ts).filter(t => !!t)
-	return ts
+	for (let [pattern, replacement] of transformations) {
+		name = name.replace(pattern, replacement)
+	}
+
+	return name.split(' ')
 }
 
 module.exports = tokenize

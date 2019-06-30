@@ -18,6 +18,7 @@ const l = str => process.stdout.write(str + '\n')
 
 const tests = [
 	['Foo BAR baz', 'foo bar baz'],
+	['foo  bar', 'foo bar'],
 
 	['Zwiesel (Bay)', 'zwiesel bayern'],
 	['Wurzbach (Thür)', 'wurzbach thueringen'],
