@@ -12,6 +12,7 @@ The station names from DB are inconsistent and user's search queries are not per
 [![build status](https://img.shields.io/travis/derhuerst/tokenize-db-station-name.svg)](https://travis-ci.org/derhuerst/tokenize-db-station-name)
 ![ISC-licensed](https://img.shields.io/github/license/derhuerst/tokenize-db-station-name.svg)
 [![chat on Gitter](https://badges.gitter.im/derhuerst/vbb-rest.svg)](https://gitter.im/derhuerst)
+[![support me on Patreon](https://img.shields.io/badge/support%20me-on%20patreon-fa7664.svg)](https://patreon.com/derhuerst)
 
 
 ## Installing

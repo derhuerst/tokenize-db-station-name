@@ -52,6 +52,12 @@ const replace = {
 	'hbf': 'hauptbahnhof'
 }
 
+const replaceWithLookahead = (token, next, replacement) => (ts) => {
+	const i = ts.indexOf(token)
+	if (i >= 0 && ts[i + 1] === next) ts[i] = replacement
+	return ts
+}
+
 const str = /(?!^)str$/g
 const strasse = /(?!^)stra(ss|ß)e$/
 const expandStr = (ts) => {
@@ -63,10 +69,8 @@ const expandStr = (ts) => {
 }
 
 const transforms = [
-	(ts) => {
-		const i = ts.indexOf('saechs')
-		if (i >= 0 && ts[i + 1] === 'schweiz') ts[i] = 'saechsische'
-	},
+	replaceWithLookahead('saechs', 'schweiz', 'saechsische'),
+	replaceWithLookahead('schaumb', 'lippe', 'schaumburg'),
 	(ts) => {
 		const i = ts.indexOf('b')
 		if (i >= 0 && ts[i + 1]) ts[i] = 'bei'

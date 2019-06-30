@@ -1,8 +1,9 @@
 'use strict'
 
-const test = require('tape')
-
 const tokenize = require('.')
+const a = require('assert')
+
+const l = str => process.stdout.write(str + '\n')
 
 // todo:
 // - Wolterdingen (Han)
@@ -15,118 +16,75 @@ const tokenize = require('.')
 // - Sachsenhausen (Nordb) -> "nordbahnhof"
 // - https://mobile.twitter.com/RecumbentTravel/status/926932596222722048
 
-test('returns lower case tokens, split by spaces', (t) => {
-	t.plan(3)
-	const r = tokenize('Foo BAR baz')
-	t.equal(r[0], 'foo')
-	t.equal(r[1], 'bar')
-	t.equal(r[2], 'baz')
-})
+const tests = [
+	['Foo BAR baz', 'foo bar baz'],
 
-test('expands shortened state/region/city names', (t) => {
-	t.plan(40)
-	t.ok(tokenize('Zwiesel (Bay)').includes('bayern'))
-	t.ok(tokenize('Wurzbach (Thür)').includes('thueringen'))
-	t.ok(tokenize('Zwickau (Sachs) Hbf').includes('sachsen'))
-	t.ok(tokenize('Wulfen (Anh)').includes('anhalt'))
-	t.ok(tokenize('Wulfen (Westf)').includes('westfalen'))
-	t.ok(tokenize('Wildberg (Württ)').includes('wuerttemberg'))
-	t.ok(tokenize('Wiesau (Oberpf)').includes('oberpfalz'))
-	t.ok(tokenize('Westheim (Schwab)').includes('schwaben'))
-	t.ok(tokenize('Weßling (Oberbay)').includes('oberbayern'))
-	t.ok(tokenize('Wedel (Holst)').includes('holstein'))
-	t.ok(tokenize('Weddel (Braunschw)').includes('braunschweig'))
-	t.ok(tokenize('Wallwitz (Saalkr)').includes('saalekreis'))
-	t.ok(tokenize('Domnitz (SaalKr)').includes('saalekreis'))
-	t.ok(tokenize('Vilshofen (Niederbay)').includes('niederbayern'))
-	t.ok(tokenize('Villingen (Schwarzw)').includes('schwarzwald'))
-	t.ok(tokenize('Varel (Oldb)').includes('oldenburg'))
-	t.ok(tokenize('Strasburg (Uckerm)').includes('uckermark'))
-	t.ok(tokenize('Langenfeld (Rheinl)-Berghausen').includes('rheinland'))
-	t.ok(tokenize('Stockheim (Oberfr)').includes('oberfranken'))
-	t.ok(tokenize('Sprendlingen (Rheinhess)').includes('rheinhessen'))
-	t.ok(tokenize('Seligenstadt (Hess)').includes('hessen'))
-	t.ok(tokenize('Seehausen (Altm)').includes('altmark'))
+	['Zwiesel (Bay)', 'zwiesel bayern'],
+	['Wurzbach (Thür)', 'wurzbach thueringen'],
+	['Zwickau (Sachs) Hbf', 'zwickau sachsen hauptbahnhof'],
+	['Wulfen (Anh)', 'wulfen anhalt'],
+	['Wulfen (Westf)', 'wulfen westfalen'],
+	['Wildberg (Württ)', 'wildberg wuerttemberg'],
+	['Wiesau (Oberpf)', 'wiesau oberpfalz'],
+	['Westheim (Schwab)', 'westheim schwaben'],
+	['Weßling (Oberbay)', 'wessling oberbayern'],
+	['Wedel (Holst)', 'wedel holstein'],
+	['Weddel (Braunschw)', 'weddel braunschweig'],
+	['Wallwitz (Saalkr)', 'wallwitz saalekreis'],
+	['Domnitz (SaalKr)', 'domnitz saalekreis'],
+	['Vilshofen (Niederbay)', 'vilshofen niederbayern'],
+	['Villingen (Schwarzw)', 'villingen schwarzwald'],
+	['Varel (Oldb)', 'varel oldenburg'],
+	['Strasburg (Uckerm)', 'strasburg uckermark'],
+	['Langenfeld (Rheinl)-Berghausen', 'langenfeld rheinland berghausen'],
+	['Stockheim (Oberfr)', 'stockheim oberfranken'],
+	['Sprendlingen (Rheinhess)', 'sprendlingen rheinhessen'],
+	['Seligenstadt (Hess)', 'seligenstadt hessen'],
+	['Seehausen (Altm)', 'seehausen altmark'],
 	// todo: use "stadt limes" instead?
-	t.ok(tokenize('Schwalbach a Ts (Limes)').includes('limesstadt'))
-	t.ok(tokenize('Schöneck (Vogtl)').includes('vogtland'))
-	t.ok(tokenize('Reuth (b Plauen/Vogtl)').includes('vogtland'))
-	t.ok(tokenize('Schönberg (Meckl)').includes('mecklenburg'))
-	t.ok(tokenize('Rückersdorf (Mittelfr)').includes('mittelfranken'))
-	t.ok(tokenize('Rodenbach (Dillkr)').includes('dillkreis'))
-	t.ok(tokenize('Reinheim (Odenw)').includes('odenwald'))
-	t.ok(tokenize('Oelsnitz (Erzgeb)').includes('erzgebirge'))
-	t.ok(tokenize('Neustadt (Weinstr) Hbf').includes('wein'))
-	t.ok(tokenize('Liebenthal (Prign)').includes('prignitz'))
-	t.ok(tokenize('Lich (Oberhess)').includes('oberhessen'))
-	t.ok(tokenize('Leer (Ostfriesl)').includes('ostfriesland'))
-	t.ok(tokenize('Langenhorn (Schlesw)').includes('schleswig'))
-	t.ok(tokenize('Königstein (Sächs Schweiz)').includes('saechsische'))
-	t.ok(tokenize('Kirchheim (Unterfr)').includes('unterfranken'))
-	t.ok(tokenize('Dernbach (Westerw)').includes('westerwald'))
-	t.ok(tokenize('Burg (Dithm)').includes('dithmarschen'))
-	t.ok(tokenize('Bad Blankenburg (Thüringerw)').includes('thueringer wald'))
-})
+	['Schwalbach a Ts (Limes)', 'schwalbach a ts limesstadt'],
+	['Schöneck (Vogtl)', 'schoeneck vogtland'],
+	['Reuth (b Plauen/Vogtl)', 'reuth bei plauen vogtland'],
+	['Schönberg (Meckl)', 'schoenberg mecklenburg'],
+	['Rückersdorf (Mittelfr)', 'rueckersdorf mittelfranken'],
+	['Rodenbach (Dillkr)', 'rodenbach dillkreis'],
+	['Reinheim (Odenw)', 'reinheim odenwald'],
+	['Oelsnitz (Erzgeb)', 'oelsnitz erzgebirge'],
+	['Neustadt (Weinstr) Hbf', 'neustadt wein strasse hauptbahnhof'],
+	['Liebenthal (Prign)', 'liebenthal prignitz'],
+	['Lich (Oberhess)', 'lich oberhessen'],
+	['Leer (Ostfriesl)', 'leer ostfriesland'],
+	['Langenhorn (Schlesw)', 'langenhorn schleswig'],
+	['Königstein (Sächs Schweiz)', 'koenigstein saechsische schweiz'],
+	['Kirchheim (Unterfr)', 'kirchheim unterfranken'],
+	['Dernbach (Westerw)', 'dernbach westerwald'],
+	['Burg (Dithm)', 'burg dithmarschen'],
+	['Bad Blankenburg (Thüringerw)', 'bad blankenburg thueringer wald'],
+	['Lindhorst (Schaumb-Lippe)', 'lindhorst schaumburg lippe'],
 
-test('replaces "Bf" by "bahnhof"', (t) => {
-	t.plan(1)
-	t.ok(tokenize('Pößneck ob Bf').includes('bahnhof'))
-})
+	['Pößneck ob Bf', 'poessneck oben bahnhof'],
+	['Wittgensdorf ob Bf', 'wittgensdorf oben bahnhof'],
+	['Pößneck unt Bf', 'poessneck unten bahnhof'],
 
-test('replaces "Hbf" by "hauptbahnhof"', (t) => {
-	t.plan(1)
-	t.ok(tokenize('Schweinfurt Hbf').includes('hauptbahnhof'))
-})
+	['Schweinfurt Hbf', 'schweinfurt hauptbahnhof'],
 
-test('replaces "ob" by "oben" and "unt" by "unten"', (t) => {
-	t.plan(2)
-	t.ok(tokenize('Wittgensdorf ob Bf').includes('oben'))
-	t.ok(tokenize('Pößneck unt Bf').includes('unten'))
-})
+	['Angermünde', 'angermuende'],
+	['Plön', 'ploen'],
+	['Plänterwald', 'plaenterwald'],
+	['Weißenau', 'weissenau'],
 
-test('replaces German umlauts', (t) => {
-	t.plan(4 * 2)
+	['Seestraße', 'see strasse'],
+	['Wiebestr/Huttenstr (Berlin)', 'wiebe strasse hutten strasse berlin'],
 
-	const a = tokenize('Angermünde')
-	t.ok(a.includes('angermuende'))
-	t.notOk(a.join('').includes('ü'))
+	['Taucha (b Leipzig)', 'taucha bei leipzig'],
+	['Horb', 'horb']
+]
 
-	const b = tokenize('Plön')
-	t.ok(b.includes('ploen'))
-	t.notOk(b.join('').includes('ö'))
-
-	const c = tokenize('Plänterwald')
-	t.ok(c.includes('plaenterwald'))
-	t.notOk(c.join('').includes('ä'))
-
-	const d = tokenize('Weißenau')
-	t.ok(d.includes('weissenau'))
-	t.notOk(d.join('').includes('ß'))
-})
-
-test('replaces `straße` suffixes by a new token `strasse`', (t) => {
-	t.plan(2)
-	const r = tokenize('Seestraße')
-	t.ok(r.includes('see'))
-	t.ok(r.includes('strasse'))
-})
-
-test('replaces `str` suffixes by a new token `strasse`', (t) => {
-	t.plan(3)
-	const r = tokenize('Wiebestr/Huttenstr (Berlin)')
-	t.ok(r.includes('wiebe'))
-	t.ok(r.includes('hutten'))
-	t.ok(r.includes('strasse'))
-})
-
-test('replaces "b " with "bei " if followed by a word', (t) => {
-	t.plan(4)
-
-	const r1 = tokenize('Taucha (b Leipzig)')
-	t.ok(r1.includes('bei'))
-	t.notOk(r1.includes('b'))
-
-	const r2 = tokenize('Horb')
-	t.ok(r2.includes('horb'))
-	t.notOk(r2.includes('bei'))
-})
+l('TAP version 13')
+let i = 0
+for (const [input, expected] of tests) {
+	l(`# ${input} -> ${expected}`)
+	a.deepStrictEqual(tokenize(input), expected.split(' '))
+	l('ok ' + (++i))
+}
+l(`1..${i}\n# ok`)

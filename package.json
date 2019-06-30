@@ -24,12 +24,9 @@
 	"dependencies": {
 		"normalize-for-search": "^2.0.1"
 	},
-	"devDependencies": {
-		"tap-min": "^1.2.2",
-		"tape": "^4.8.0"
-	},
+	"devDependencies": {},
 	"scripts": {
-		"test": "node test.js | tap-min",
-		"prepublish": "npm test"
+		"test": "node test.js",
+		"prepublishOnly": "npm test"
 	}
 }
