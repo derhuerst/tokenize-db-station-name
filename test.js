@@ -56,7 +56,7 @@ test('expands shortened state/region/city names', (t) => {
 	t.ok(tokenize('Rodenbach (Dillkr)').includes('dillkreis'))
 	t.ok(tokenize('Reinheim (Odenw)').includes('odenwald'))
 	t.ok(tokenize('Oelsnitz (Erzgeb)').includes('erzgebirge'))
-	t.ok(tokenize('Neustadt (Weinstr) Hbf').includes('weinstrasse'))
+	t.ok(tokenize('Neustadt (Weinstr) Hbf').includes('wein'))
 	t.ok(tokenize('Liebenthal (Prign)').includes('prignitz'))
 	t.ok(tokenize('Lich (Oberhess)').includes('oberhessen'))
 	t.ok(tokenize('Leer (Ostfriesl)').includes('ostfriesland'))
@@ -102,6 +102,21 @@ test('replaces German umlauts', (t) => {
 	const d = tokenize('Weißenau')
 	t.ok(d.includes('weissenau'))
 	t.notOk(d.join('').includes('ß'))
+})
+
+test('replaces `straße` suffixes by a new token `strasse`', (t) => {
+	t.plan(2)
+	const r = tokenize('Seestraße')
+	t.ok(r.includes('see'))
+	t.ok(r.includes('strasse'))
+})
+
+test('replaces `str` suffixes by a new token `strasse`', (t) => {
+	t.plan(3)
+	const r = tokenize('Wiebestr/Huttenstr (Berlin)')
+	t.ok(r.includes('wiebe'))
+	t.ok(r.includes('hutten'))
+	t.ok(r.includes('strasse'))
 })
 
 test('replaces "b " with "bei " if followed by a word', (t) => {

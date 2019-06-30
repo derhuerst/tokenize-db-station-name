@@ -52,6 +52,16 @@ const replace = {
 	'hbf': 'hauptbahnhof'
 }
 
+const str = /(?!^)str$/g
+const strasse = /(?!^)stra(ss|ß)e$/
+const expandStr = (ts) => {
+	return ts.reduce((ts, t) => {
+		if (t.match(str)) return [...ts, t.replace(str, ''), 'strasse']
+		if (t.match(strasse)) return [...ts, t.replace(strasse, ''), 'strasse']
+		return [...ts, t]
+	}, [])
+}
+
 const transforms = [
 	(ts) => {
 		const i = ts.indexOf('saechs')
@@ -60,25 +70,27 @@ const transforms = [
 	(ts) => {
 		const i = ts.indexOf('b')
 		if (i >= 0 && ts[i + 1]) ts[i] = 'bei'
-	}
+		return ts
+	},
+	expandStr
 ]
 
 const tokenize = (name) => {
 	if ('string' !== typeof name) throw new Error('name must be a string')
 	if (name.length === 0) return ''
 
-	const ts = normalize(name)
+	let ts = normalize(name)
 	.split(delim)
 	.map(t => t.trim())
-	.filter(t => t.length > 0)
+	.filter(t => !!t)
 	.map((t) => {
 		if (t in replace) return replace[t]
 		return t
 	})
 
-	for (let t of transforms) t(ts)
+	for (let t of transforms) ts = t(ts)
 
-	return ts
+	return ts.filter(t => !!t)
 }
 
 module.exports = tokenize
