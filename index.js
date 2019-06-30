@@ -2,55 +2,52 @@
 
 const normalize = require('normalize-for-search')
 
-const delim = /[\s\/\(\)\-,\.\+]+/
-const specialChars = /[^\w\s]|_/g
+const replace = Object.assign(Object.create(null), {
+	'bay': ['bayern'],
+	'thuer': ['thueringen'],
+	'sachs': ['sachsen'],
+	'anh': ['anhalt'],
+	'westf': ['westfalen'],
+	'wuertt': ['wuerttemberg'],
+	'oberpf': ['oberpfalz'],
+	'schwab': ['schwaben'],
+	'oberbay': ['oberbayern'],
+	'holst': ['holstein'],
+	'braunschw': ['braunschweig'],
+	'saalkr': ['saalekreis'],
+	'saalkr': ['saalekreis'],
+	'niederbay': ['niederbayern'],
+	'schwarzw': ['schwarzwald'],
+	'oldb': ['oldenburg'],
+	'uckerm': ['uckermark'],
+	'rheinl': ['rheinland'],
+	'oberfr': ['oberfranken'],
+	'rheinhess': ['rheinhessen'],
+	'hess': ['hessen'],
+	'altm': ['altmark'],
+	'limes': ['limesstadt'],
+	'vogtl': ['vogtland'],
+	'meckl': ['mecklenburg'],
+	'mittelfr': ['mittelfranken'],
+	'dillkr': ['dillkreis'],
+	'odenw': ['odenwald'],
+	'erzgeb': ['erzgebirge'],
+	'weinstr': ['weinstrasse'],
+	'prign': ['prignitz'],
+	'oberhess': ['oberhessen'],
+	'ostfriesl': ['ostfriesland'],
+	'schlesw': ['schleswig'],
+	'saechs schweiz': ['saechsische', 'schweiz'], // todo
+	'unterfr': ['unterfranken'],
+	'westerw': ['westerwald'],
+	'dithm': ['dithmarschen'],
+	'thueringerw': ['thueringer', 'wald'],
 
-const replace = {
-	'bay': 'bayern',
-	'thuer': 'thueringen',
-	'sachs': 'sachsen',
-	'anh': 'anhalt',
-	'westf': 'westfalen',
-	'wuertt': 'wuerttemberg',
-	'oberpf': 'oberpfalz',
-	'schwab': 'schwaben',
-	'oberbay': 'oberbayern',
-	'holst': 'holstein',
-	'braunschw': 'braunschweig',
-	'saalkr': 'saalekreis',
-	'saalkr': 'saalekreis',
-	'niederbay': 'niederbayern',
-	'schwarzw': 'schwarzwald',
-	'oldb': 'oldenburg',
-	'uckerm': 'uckermark',
-	'rheinl': 'rheinland',
-	'oberfr': 'oberfranken',
-	'rheinhess': 'rheinhessen',
-	'hess': 'hessen',
-	'altm': 'altmark',
-	'limes': 'limesstadt',
-	'vogtl': 'vogtland',
-	'meckl': 'mecklenburg',
-	'mittelfr': 'mittelfranken',
-	'dillkr': 'dillkreis',
-	'odenw': 'odenwald',
-	'erzgeb': 'erzgebirge',
-	'weinstr': 'weinstrasse',
-	'prign': 'prignitz',
-	'oberhess': 'oberhessen',
-	'ostfriesl': 'ostfriesland',
-	'schlesw': 'schleswig',
-	'saechs schweiz': 'saechsische',
-	'unterfr': 'unterfranken',
-	'westerw': 'westerwald',
-	'dithm': 'dithmarschen',
-	'thueringerw': 'thueringer wald',
-
-	'ob': 'oben',
-	'unt': 'unten',
-	'bf': 'bahnhof',
-	'hbf': 'hauptbahnhof'
-}
+	'ob': ['oben'],
+	'unt': ['unten'],
+	'bf': ['bahnhof'],
+	'hbf': ['hauptbahnhof']
+})
 
 const replaceWithLookahead = (token, next, replacement) => (ts) => {
 	const i = ts.indexOf(token)
@@ -69,6 +66,11 @@ const expandStr = (ts) => {
 }
 
 const transforms = [
+	(ts) => {
+		return ts.reduce((ts, t) => {
+			return replace[t] ? [...ts, ...replace[t]] : [...ts, t]
+		}, [])
+	},
 	replaceWithLookahead('saechs', 'schweiz', 'saechsische'),
 	replaceWithLookahead('schaumb', 'lippe', 'schaumburg'),
 	(ts) => {
@@ -81,20 +83,15 @@ const transforms = [
 
 const tokenize = (name) => {
 	if ('string' !== typeof name) throw new Error('name must be a string')
-	if (name.length === 0) return ''
+	if (name.length === 0) return []
 
 	let ts = normalize(name)
-	.split(delim)
+	.split(/[\s\/\(\)\-,\.\+]+/)
 	.map(t => t.trim())
 	.filter(t => !!t)
-	.map((t) => {
-		if (t in replace) return replace[t]
-		return t
-	})
 
-	for (let t of transforms) ts = t(ts)
-
-	return ts.filter(t => !!t)
+	for (let t of transforms) ts = t(ts).filter(t => !!t)
+	return ts
 }
 
 module.exports = tokenize
