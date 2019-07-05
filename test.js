@@ -69,6 +69,11 @@ const tests = [
 
 	['Schweinfurt Hbf', 'schweinfurt hauptbahnhof'],
 
+	['Berlin Hbf (S-Bahn)', 'berlin hauptbahnhof sbahn'],
+	['Charlottenburg Bahnhof (S), Berlin', 'charlottenburg bahnhof sbahn berlin'],
+	['Berlin Hauptbahnhof (S+U), Berlin', 'berlin hauptbahnhof sbahn ubahn berlin'],
+	['Hermannplatz (U), Berlin', 'hermannplatz ubahn berlin'],
+
 	['Angermünde', 'angermuende'],
 	['Plön', 'ploen'],
 	['Plänterwald', 'plaenterwald'],
