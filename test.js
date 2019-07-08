@@ -83,7 +83,9 @@ const tests = [
 	['Wiebestr/Huttenstr (Berlin)', 'wiebe strasse hutten strasse berlin'],
 
 	['Taucha (b Leipzig)', 'taucha bei leipzig'],
-	['Horb', 'horb']
+	['Horb', 'horb'],
+
+	['Heinrich-von-Kleist-Str., Potsdam', 'heinrich von kleist strasse potsdam']
 ]
 
 l('TAP version 13')

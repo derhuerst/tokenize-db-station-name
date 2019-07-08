@@ -75,7 +75,7 @@ const tokenize = (name) => {
 		name = name.replace(pattern, replacement)
 	}
 
-	return name.split(' ')
+	return name.split(/\s+/)
 }
 
 module.exports = tokenize
