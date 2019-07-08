@@ -68,6 +68,7 @@ const tests = [
 	['Pößneck unt Bf', 'poessneck unten bahnhof'],
 
 	['Schweinfurt Hbf', 'schweinfurt hauptbahnhof'],
+	['Frankfurt(M) Flughafen Fernbf', 'frankfurt main flughafen fernbahnhof'],
 
 	['Berlin Hbf (S-Bahn)', 'berlin hauptbahnhof sbahn'],
 	['Charlottenburg Bahnhof (S), Berlin', 'charlottenburg bahnhof sbahn berlin'],

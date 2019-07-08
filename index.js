@@ -49,9 +49,12 @@ const transformationsNormalized = [
 	[/(?<!\w)thueringerw(?=$|\s|,)/g, 'thueringer wald'],
 	[/(?<!\w)schaumb\slippe(?=$|\s|,)/g, 'schaumburg lippe'],
 
+	[/(?<!\w)frankfurt\sm(?=$|\s|,)/g, 'frankfurt main'],
+
 	[/(?<!\w)ob(?=$|\s|,)/g, 'oben'],
 	[/(?<!\w)unt(?=$|\s|,)/g, 'unten'],
 	[/(?<!\w)bf(?=$|\s|,)/g, 'bahnhof'],
+	[/(?<!\w)fernbf(?=$|\s|,)/g, 'fernbahnhof'],
 	[/(?<!\w)hbf(?=$|\s|,)/g, 'hauptbahnhof'],
 	[/(?<!\w)b(?=\s\w)/g, 'bei'], // "foo b berlin" -> "foo bei berlin"
 	[/str(?=$|\s|,)/g, ' strasse'], // "weinstr foo" -> "wein strasse foo"
