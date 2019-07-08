@@ -1,7 +1,7 @@
 {
 	"name": "tokenize-db-station-name",
 	"description": "Make DB station names search-safe.",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"main": "index.js",
 	"files": [
 		"index.js"

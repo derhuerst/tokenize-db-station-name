@@ -50,6 +50,7 @@ const transformationsNormalized = [
 	[/(?<!\w)schaumb\slippe(?=$|\s|,)/g, 'schaumburg lippe'],
 
 	[/(?<!\w)frankfurt\sm(?=$|\s|,)/g, 'frankfurt main'],
+	[/(?<!\w)frankfurt\sam\smain(?=$|\s|,)/g, 'frankfurt main'],
 
 	[/(?<!\w)ob(?=$|\s|,)/g, 'oben'],
 	[/(?<!\w)unt(?=$|\s|,)/g, 'unten'],
