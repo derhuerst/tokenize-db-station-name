@@ -32,6 +32,11 @@ tokenize('Königstein (Sächs Schweiz)')
 ```
 
 
+## Related
+
+- [`db-clean-station-name`](https://github.com/juliuste/db-clean-station-name) – Remove noise and fix common typographic errors in Deutsche Bahn (German railways) station names.
+
+
 ## Contributing
 
 If you **have a question**, **found a bug** or want to **propose a feature**, have a look at [the issues page](https://github.com/derhuerst/tokenize-db-station-name/issues).
