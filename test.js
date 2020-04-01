@@ -76,6 +76,9 @@ const tests = [
 	['Berlin Hauptbahnhof (S+U), Berlin', 'berlin hauptbahnhof sbahn ubahn berlin'],
 	['Hermannplatz (U), Berlin', 'hermannplatz ubahn berlin'],
 
+	['Neukölln [U7], Berlin', 'neukoelln u7 berlin'],
+	['Turmstr. [Bus Alt-Moabit] (U), Berlin', 'turm strasse bus alt moabit ubahn berlin'],
+
 	['Angermünde', 'angermuende'],
 	['Plön', 'ploen'],
 	['Plänterwald', 'plaenterwald'],

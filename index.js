@@ -3,6 +3,7 @@
 const normalize = require('normalize-for-search')
 
 const transformationsRaw = [
+	[/\[([^\]]+)\]/g, '$1'],
 	[/(?<!\w)\(?S\+U\)?(?=$|\s|,)/g, 'sbahn ubahn'],
 	[/(?<!\w)\(?U(-Bahn)?\)?(?=$|\s|,)/g, 'ubahn'],
 	[/(?<!\w)\(?S(-Bahn)?\)?(?=$|\s|,)/g, 'sbahn']
