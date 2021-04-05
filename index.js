@@ -53,14 +53,24 @@ const transformationsNormalized = [
 	[/(?<!\w)frankfurt\sm(?=$|\s|,)/g, 'frankfurt main'],
 	[/(?<!\w)frankfurt\sam\smain(?=$|\s|,)/g, 'frankfurt main'],
 
-	[/(?<!\w)ob(?=$|\s|,)/g, 'oben'],
-	[/(?<!\w)unt(?=$|\s|,)/g, 'unten'],
-	[/(?<!\w)bf(?=$|\s|,)/g, 'bahnhof'],
-	[/(?<!\w)fernbf(?=$|\s|,)/g, 'fernbahnhof'],
-	[/(?<!\w)hbf(?=$|\s|,)/g, 'hauptbahnhof'],
-	[/(?<!\w)b(?=\s\w)/g, 'bei'], // "foo b berlin" -> "foo bei berlin"
-	[/str(?=$|\s|,)/g, ' strasse'], // "weinstr foo" -> "wein strasse foo"
-	[/(?<=\w)strasse(?=$|\s|,)/g, ' strasse'] // "seestrasse" -> "see strasse"
+	[/(?<!^|\w)ob(?=$|\s|,)/g, 'oben'],
+	[/(?<!^|\w)unt(?=$|\s|,)/g, 'unten'],
+	[/(?<!^|\w)bf(?=$|\s|,)/g, 'bahnhof'],
+	[/(?<!^|\w)fernbf(?=$|\s|,)/g, 'fernbahnhof'],
+	[/(?<!^|\w)hbf(?=$|\s|,)/g, 'hauptbahnhof'],
+	[/(?<!^|\w)b(?=\s\w)/g, 'bei'], // "foo b berlin" -> "foo bei berlin"
+	// "wein str foo" -> "wein strasse foo"
+	// "wein-str foo" -> "wein- strasse foo"
+	// "weinstr foo" -> "wein strasse foo"
+	// "weinstr" -> "wein strasse"
+	[/str(?=$|\s|,)/g, ' strasse'],
+	[/(?<=\w)strasse(?=$|\s|,)/g, ' strasse'], // "seestrasse" -> "see strasse"
+	// "alexander pl foo" -> "alexander platz foo"
+	// "alexander-pl foo" -> "alexander- platz foo"
+	// "alexanderpl foo" -> "alexander platz foo"
+	// "alexanderpl" -> "alexander platz"
+	[/pl(?=$|\s|,)/g, ' platz'],
+	[/(?<=\w)platz(?=$|\s|,)/g, ' platz'], // "alexanderplatz" -> "alexander platz"
 ]
 
 const tokenize = (name) => {

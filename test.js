@@ -74,7 +74,7 @@ const tests = [
 	['Berlin Hbf (S-Bahn)', 'berlin hauptbahnhof sbahn'],
 	['Charlottenburg Bahnhof (S), Berlin', 'charlottenburg bahnhof sbahn berlin'],
 	['Berlin Hauptbahnhof (S+U), Berlin', 'berlin hauptbahnhof sbahn ubahn berlin'],
-	['Hermannplatz (U), Berlin', 'hermannplatz ubahn berlin'],
+	['Hermannplatz (U), Berlin', 'hermann platz ubahn berlin'],
 
 	['Neukölln [U7], Berlin', 'neukoelln u7 berlin'],
 	['Turmstr. [Bus Alt-Moabit] (U), Berlin', 'turm strasse bus alt moabit ubahn berlin'],
@@ -86,6 +86,11 @@ const tests = [
 
 	['Seestraße', 'see strasse'],
 	['Wiebestr/Huttenstr (Berlin)', 'wiebe strasse hutten strasse berlin'],
+	['Alexanderplatz', 'alexander platz'],
+	['Alexanderpl.', 'alexander platz'],
+	['Friedrich-Wilhelm-Pl.', 'friedrich wilhelm platz'],
+	['Olivaer Pl', 'olivaer platz'],
+	['Olivaer Pl.', 'olivaer platz'],
 
 	['Taucha (b Leipzig)', 'taucha bei leipzig'],
 	['Horb', 'horb'],
