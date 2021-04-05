@@ -2,11 +2,19 @@
 
 const normalize = require('normalize-for-search')
 
+// like \w and \b, but with Unicode support
+const w = '[\\p{L}\\p{N}]'
+const b = '[^\\p{L}\\p{N}]'
+const beforeBdry = `(?<=${b})`
+const beforeBdryOrStart = `(?<=^|${b})`
+const afterBdry = `(?=${b})`
+const afterBdryOrEnd = `(?=$|${b})`
+
 const transformationsRaw = [
 	[/\[([^\]]+)\]/g, '$1'],
-	[/(?<!\w)\(?S\+U\)?(?=$|\s|,)/g, 'sbahn ubahn'],
-	[/(?<!\w)\(?U(-Bahn)?\)?(?=$|\s|,)/g, 'ubahn'],
-	[/(?<!\w)\(?S(-Bahn)?\)?(?=$|\s|,)/g, 'sbahn']
+	[new RegExp(`${beforeBdryOrStart}\\(?S\\+U\\)?${afterBdryOrEnd}`, 'gu'), 'sbahn ubahn'],
+	[new RegExp(`${beforeBdryOrStart}\\(?U(-Bahn)?\\)?${afterBdryOrEnd}`, 'gu'), 'ubahn'],
+	[new RegExp(`${beforeBdryOrStart}\\(?S(-Bahn)?\\)?${afterBdryOrEnd}`, 'gu'), 'sbahn']
 ]
 
 const transformationsNormalized = [

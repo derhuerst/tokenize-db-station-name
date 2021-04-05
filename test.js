@@ -62,10 +62,18 @@ const tests = [
 	['Burg (Dithm)', 'burg dithmarschen'],
 	['Bad Blankenburg (Thüringerw)', 'bad blankenburg thueringer wald'],
 	['Lindhorst (Schaumb-Lippe)', 'lindhorst schaumburg lippe'],
+	// fictive names, check that it recognizes non-ASCII as the same word
+	['Foo (Käbay)', 'foo kaebay'],
+	['Foo (Kübay)', 'foo kuebay'],
+	['Foo (Köbay)', 'foo koebay'],
+	['Bar (Kaßoberpf)', 'bar kassoberpf'],
 
 	['Pößneck ob Bf', 'poessneck oben bahnhof'],
 	['Wittgensdorf ob Bf', 'wittgensdorf oben bahnhof'],
 	['Pößneck unt Bf', 'poessneck unten bahnhof'],
+	// fictive names, check that it recognizes non-ASCII as the same word
+	['Foo Tráob', 'foo traob'],
+	['Bar Kaçunt', 'bar kacunt'],
 
 	['Schweinfurt Hbf', 'schweinfurt hauptbahnhof'],
 	['Frankfurt(M) Flughafen Fernbf', 'frankfurt main flughafen fernbahnhof'],
@@ -75,6 +83,11 @@ const tests = [
 	['Charlottenburg Bahnhof (S), Berlin', 'charlottenburg bahnhof sbahn berlin'],
 	['Berlin Hauptbahnhof (S+U), Berlin', 'berlin hauptbahnhof sbahn ubahn berlin'],
 	['Hermannplatz (U), Berlin', 'hermann platz ubahn berlin'],
+	// fictive names, check that it recognizes non-ASCII as the same word
+	['FäS', 'faes'],
+	['FäS-Bahn', 'faes bahn'],
+	['FooßU', 'foossu'],
+	['FooßU-Bahn', 'foossu bahn'],
 
 	['Neukölln [U7], Berlin', 'neukoelln u7 berlin'],
 	['Turmstr. [Bus Alt-Moabit] (U), Berlin', 'turm strasse bus alt moabit ubahn berlin'],
@@ -94,6 +107,10 @@ const tests = [
 
 	['Taucha (b Leipzig)', 'taucha bei leipzig'],
 	['Horb', 'horb'],
+	// fictive names, check that it recognizes non-ASCII as the same word
+	['Tréb Foo', 'treb foo'],
+	['Kœb Bar', 'koeb bar'], // U+0153
+	// todo: what about U+0276?
 
 	['Heinrich-von-Kleist-Str., Potsdam', 'heinrich von kleist strasse potsdam']
 ]
