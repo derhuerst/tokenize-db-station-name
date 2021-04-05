@@ -1,7 +1,7 @@
 {
 	"name": "tokenize-db-station-name",
 	"description": "Make DB station names search-safe.",
-	"version": "2.2.3",
+	"version": "3.0.0",
 	"main": "index.js",
 	"files": [
 		"index.js"
@@ -19,7 +19,7 @@
 	"repository": "git://github.com/derhuerst/tokenize-db-station-name.git",
 	"license": "ISC",
 	"engines": {
-		"node": ">=8"
+		"node": ">=12"
 	},
 	"dependencies": {
 		"normalize-for-search": "^2.0.1"
